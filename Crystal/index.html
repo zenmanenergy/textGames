@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<!-- TO DO:
+  	- Try adding locked doors and keys
+  	- Come up with ideas for where to take game
+  		- puzzle game <-
+  		- fighting
+
+previosu update: added different types of monsters, and placed all monsters in specfic rooms. made it so by killing them all you can win the game. Spent awhile debugging and fixing errors.
+
+last update: bebugged, fixed error with hodgepodge, added umbrella concept and 2nd key, worked on "finializing" game
+
+ideas: time element w/ the pink tormaline, big bad main boss before getting philosophers stone, less big but big bad in Buddy bot (later), hugbears in hugbear room, random monsteres confined to some rooms and specfic monsters in others
+
+next time: just put different monster in different rooms, and name different, then work on more specfics, counting number of moves, concept of winning and losing
+
+HW: add umbrella super powerful weapon, make it so axe and key in later room, and umbrella to wield and pick up commandType, hodgepodge's hitpoints a ton, make 2nd key, place umbrella in room wouldn't normally go in, fix spelling for conservatory, double check room descriptions and directions to make sure it says right directiosn you can go
+
+ -->
+
+
+
+	<title> Text Game </title>
+
+	<script language="javascript" src="npcs.js"></script>
+
+	<script language="javascript">
+		var currentRoom = "Conservatory";
+
+		var player = {
+			"rightHand": "your fist", damage: 10
+
+		}
+
+		var inventory = {
+			"pants": {
+				"type": "clothing"
+			},
+
+
+
+		}
+
+		var items ={
+			key : {
+				"key 1": {"name":"key 1", "doors": ["door 3","door 4","door 18","door 21","door 22", "door 23"], "image":"key1.png", "type":"key", "description": "You see a shiny key."},
+
+
+			},
+
+			axe:{
+				"axe": {"name":"axe", "damage": 100, "image":"axe.png", "type": "weapon", "description": "You see a dull axe."},
+			},
+
+			umbrella:{
+				"umbrella": {"name":"umbrella", "damage": 100000, "image":"umbrella.png", "type": "weapon", "description": "You see the most magical and fantasical of umbrellas."},
+			},
+		}
+
+
+		var doors = {
+			"door 1": {
+				"open": false,
+				"locked": false
+			},
+
+			"door 2": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 3": {
+				"open": true,
+				"locked": true
+			},
+
+			"door 4": {
+				"open": false,
+				"locked": true
+			},
+
+			"door 5": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 6": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 7": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 8": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 9": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 10": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 11": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 12": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 13": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 14": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 15": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 16": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 17": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 18": {
+				"open": true,
+				"locked": true
+			},
+
+			"door 19": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 20": {
+				"open": true,
+				"locked": false
+			},
+
+			"door 21": {
+				"open": true,
+				"locked": true
+			},
+
+			"door 22": {
+				"open": true,
+				"locked": true
+			},
+
+			"door 23": {
+				"open": true,
+				"locked": true
+			}
+
+		}
+
+		var rooms = {
+			"Conservatory": {
+				"src": "images/map/Crystal Kingdom Highlighted Conservatory For Text Game.png",
+				"description": "You see a airlock leading to the east and another leading northeast."
+				, "east": {
+					"room":"Magical World of Elevators",
+					"door": "door 1"
+				}
+				, "northeast": {
+					"room": "Research Materials Storage Chamber",
+					"door": "door 2"
+				}
+
+			},
+
+			"Magical World of Elevators": {
+				"src": "images/map/Crystal Kingdom Highlighted Magical World of Elevators For Text Game.png",
+				"description": "You see the airlock leading back into the Conservatory to your west. A door towards the east with a sign saying Little Genius Buddy Bot R & D. And airlocks leading towards the southeast and northwest."
+				, "west": {
+					"room": "Conservatory",
+					"door": "door 1"
+				}
+				, "east": {
+					"room": "Little Genius Buddy Bot R & D",
+					"door": "door 4"
+				}
+				, "southeast": {
+					"room":"Radiation Ventilation Maintenance Chamber",
+					"door": "door 3"
+				}
+				, "northwest": {
+					"room":"Research Materials Storage Chamber",
+					"door": "door 5"
+				}
+				, "items":{
+					"key 1": {
+					"type": "key"
+					},
+
+					"axe": {
+					"type": "axe"
+					}
+				}
+			},
+
+			"Research Materials Storage Chamber": {
+				"src": "images/map/Crystal Kingdom Highlighted Research Materials Storage Chamber For Text Game.png",
+				"description": "To the southwest you see the airlock leading back to the Conservatory, and to the southeast you see a airlock leading to a room labeled the Magical World of Elevators."
+				, "southwest": {
+					"room": "Conservatory",
+					"door": "door 2"
+				}
+				, "southeast": {
+					"room":"Magical World of Elevators",
+					"door": "door 5"
+				}
+			},
+
+			"Radiation Ventilation Maintenance Chamber": {
+				"src": "images/map/Crystal Kingdom Highlighted Radiation Ventilation Maintenance Chamber For Text Game.png",
+				"description": "You see airlocks leading to the north and northwest."
+				, "northwest": {
+					"room":"Magical World of Elevators",
+					"door": "door 3"
+				}
+				, "north": {
+					"room":"Little Genius Buddy Bot R & D",
+					"door": "door 6"
+				}
+			},
+
+			"Little Genius Buddy Bot R & D": {
+				"src": "images/map/Crystal Kingdom Highlighted Little Genius Buddy Bot R & D For Text Game.png",
+				"description": "There and three exits from this room. One leading south, one leading east, and one leading to the west back into the Magical World of Elevators."
+				, "west": {
+					"room":"Magical World of Elevators",
+					"door": "door 4"
+				}
+				, "east": {
+					"room":"NO3113's Lobby",
+					"door": "door 7"
+				}
+				, "south": {
+					"room":"Radiation Ventilation Maintenance Chamber",
+					"door": "door 6"
+				}
+			},
+
+			"NO3113's Lobby": {
+				"src": "images/map/Crystal Kingdom Highlighted NO3113's Lobby For Text Game.png",
+				"description": "You see five airlocks leading out of this room. One to the north, northeast, east, west, and northwest."
+				,"west": {
+					"room":"Little Genius Buddy Bot R & D",
+					"door": "door 7"
+				}
+				, "east": {
+					"room":"Hugbears",
+					"door": "door 10"
+				}
+				, "northwest": {
+					"room":"Maureen's Quarters",
+					"door": "door 8"
+				}
+				, "north": {
+					"room":"Lucas' Quarters",
+					"door": "door 9"
+				}
+				, "northeast": {
+					"room":"Death Laser Calibration Chamber",
+					"door": "door 11"
+				}
+			},
+
+			"Maureen's Quarters": {
+				"src": "images/map/Crystal Kingdom Highlighted Maureen's Quarters For Text Game.png",
+				"description": "There's only one airlock in this room, leading south back into NO3113's Lobby."
+				, "south": {
+					"room":"NO3113's Lobby",
+					"door": "door 8"
+				}
+			},
+
+			"Lucas' Quarters": {
+				"src": "images/map/Crystal Kingdom Highlighted Lucas' Quarters For Text Game.png",
+				"description": "There's only one airlock in this room, leading south back into NO3113's Lobby."
+				, "south": {
+					"room":"NO3113's Lobby",
+					"door": "door 9"
+				}
+			},
+
+			"Death Laser Calibration Chamber": {
+				"src": "images/map/Crystal Kingdom Highlighted Death Laser Calibration Chamber For Text Game.png",
+				"description": "There are airlocks in this room leading to the south and southwest."
+				, "south": {
+					"room":"Hugbears",
+					"door": "door 12"
+				}
+				, "southwest": {
+					"room":"NO3113's Lobby",
+					"door": "door 11"
+				}
+			},
+
+			"Hugbears": {
+				"src": "images/map/Crystal Kingdom Highlighted Hugbears For Text Game.png",
+				"description": "From the Hugbears room there are airlocks to the north, east, and west."
+				, "west": {
+					"room":"NO3113's Lobby",
+					"door": "door 10"
+				}
+				, "east": {
+					"room":"Storage",
+					"door": "door 13"
+				}
+				, "north": {
+					"room":"Death Laser Calibration Chamber",
+					"door": "door 12"
+				}
+			},
+
+			"Storage": {
+				"src": "images/map/Crystal Kingdom Highlighted Storage For Text Game.png",
+				"description": "In the direction you came there is a airlock leading back west. To the northeast is the Thermal Regulation Chamber and to the southeast is the Gravity Augmentation Chamber."
+				, "west": {
+					"room":"Hugbears",
+					"door": "door 13"
+				}
+				, "northeast": {
+					"room":"Thermal Regulation Chamber",
+					"door": "door 14"
+				}
+				, "southeast": {
+					"room":"Gravity Augmentation Chamber",
+					"door": "door 15"
+				}
+			},
+
+			"Thermal Regulation Chamber": {
+				"src": "images/map/Crystal Kingdom Highlighted Thermal Regulation Chamber For Text Game.png",
+				"description": "To the west is the Storage, and to the east an airlock leading to the Upper/Main Lobby."
+				, "southwest": {
+					"room":"Storage",
+					"door": "door 14"
+				}
+				, "east": {
+					"room":"Upper/Main Lobby",
+					"door": "door 16"
+				}
+			},
+
+			"Gravity Augmentation Chamber": {
+				"src": "images/map/Crystal Kingdom Highlighted Gravity Augmentation Chamber For Text Game.png",
+				"description": "To the west is the Storage, and to the east a airlock leading to the Upper/Main Lobby."
+				, "northwest": {
+					"room":"Storage",
+					"door": "door 15"
+				}
+				, "east": {
+					"room":"Upper/Main Lobby",
+					"door": "door 17"
+				}
+			},
+
+			"Upper/Main Lobby": {
+				"src": "images/map/Crystal Kingdom Highlighted Upper-Main Lobby For Text Game.png",
+				"description": "There are many directions you can go from here. To the northwest is the Thermal Regulation Chamber, north is the Med Bay, northeast is the Cosmoscope, and southwest is the Gravity Augmentation Chamber. In the center of the room there is also Elevator leading down."
+				, "northwest": {
+					"room":"Thermal Regulation Chamber",
+					"door": "door 16"
+				}
+				, "southwest": {
+					"room":"Gravity Augmentation Chamber",
+					"door": "door 17"
+				}
+				, "north": {
+					"room":"Med Bay",
+					"door": "door 18"
+				}
+				, "northeast": {
+					"room":"Cosmoscope",
+					"door": "door 19"
+				}
+				, "down": {
+					"room":"Lower Lobby",
+					"door": "door 20"
+				}
+			},
+
+			"Med Bay": {
+				"src": "images/map/Crystal Kingdom Highlighted Med Bay For Text Game.png",
+				"description": "There's is one airlock in here leading south back to the Upper/Main Lobby."
+				, "south": {
+					"room":"Upper/Main Lobby",
+					"door": "door 18"
+				}
+			},
+
+			"Cosmoscope": {
+				"src": "images/map/Crystal Kingdom Highlighted Cosmoscope For Text Game.png",
+				"description": "There's is one airlock in here leading south back to the Upper/Main Lobby."
+				, "southwest": {
+					"room":"Upper/Main Lobby",
+					"door": "door 19"
+				}
+				, "items":{
+					"umbrella": {
+						"type": "umbrella"
+					}
+				}
+			},
+
+			"Lower Lobby": {
+				"src": "images/map/Crystal Kingdom Highlighted Lower Lobby For Text Game.png",
+				"description": "In the center of the room is a Elevator leading up. To the northwest theres an airlock leading into a Room labeled Robotics Manufacturing Center, and to the west is a room labeled Main Experiment Chamber."
+				, "northwest": {
+					"room":"Robotics Manufacturing Center",
+					"door": "door 21"
+				}
+				, "west": {
+					"room":"Main Experiment Chamber",
+					"door": "door 23"
+				}
+				, "up": {
+					"room":"Upper/Main Lobby",
+					"door": "door 20"
+				}
+			},
+
+			"Robotics Manufacturing Center": {
+				"src": "images/map/Crystal Kingdom Highlighted Robotics Manufacturing Center For Text Game.png",
+				"description": "There are two airlocks leading out of this room. One to the southeast and back to Lower Lobby, and one to the southwest into a room labeled Main Experiment Chamber."
+				, "southeast": {
+					"room":"Lower Lobby",
+					"door": "door 21"
+				}
+				, "southwest": {
+					"room":"Main Experiment Chamber",
+					"door": "door 22"
+				}
+			},
+
+			"Main Experiment Chamber": {
+				"src": "images/map/Crystal Kingdom Highlighted Main Experiment Chamber For Text Game.png",
+				"description": "From this room there is a airlock leading northeast to the Robotics Manufacturing Center, and one to the east and back to the Lower Lobby."
+				, "northeast": {
+					"room":"Robotics Manufacturing Center",
+					"door": "door 22"
+				}
+				, "east": {
+					"room":"Lower Lobby",
+					"door": "door 23"
+				}
+			},
+		}
+
+		var result="";
+
+		function commandType (response){
+
+			if(response.toLowerCase()== "n" || response.toLowerCase()== "north"){
+
+					result=moveTo ("north");
+
+				}
+
+				else if(response.toLowerCase()== "s" || response.toLowerCase()== "south"){
+
+					result=moveTo ("south");
+
+				}
+
+				else if(response.toLowerCase()== "e" || response.toLowerCase()== "east"){
+
+					result=moveTo ("east");
+				}
+
+				else if(response.toLowerCase()== "w" || response.toLowerCase()== "west"){
+
+					result=moveTo ("west");
+
+				}
+
+				else if(response.toLowerCase()== "nw" || response.toLowerCase()== "northwest"){
+
+					result=moveTo ("northwest");
+
+				}
+
+				else if(response.toLowerCase()== "sw" || response.toLowerCase()== "southwest"){
+
+					result=moveTo ("southwest");
+
+				}
+
+				else if(response.toLowerCase()== "ne" || response.toLowerCase()== "northeast"){
+
+					result=moveTo ("northeast");
+
+				}
+
+				else if(response.toLowerCase()== "se" || response.toLowerCase()== "southeast"){
+
+					result=moveTo ("southeast");
+
+				}
+
+				else if(response.toLowerCase()== "u" || response.toLowerCase()== "up"){
+
+					result=moveTo ("up");
+
+				}
+
+				else if(response.toLowerCase()== "d" || response.toLowerCase()== "down"){
+
+					result=moveTo ("down");
+				}
+
+				else if(response.toLowerCase()=="look") {
+
+					result=look ();
+				}
+
+				else if(response.toLowerCase().search("open")>-1 && response.toLowerCase().search("door")>-1) {
+
+					var doorDirection = ""
+
+					if (response.toLowerCase().search("northwest")>-1) {
+						doorDirection = "northwest";
+					}
+
+					else if (response.toLowerCase().search("northeast")>-1) {
+						doorDirection = "northeast";
+					}
+
+					else if (response.toLowerCase().search("southwest")>-1) {
+						doorDirection = "southwest";
+					}
+
+					else if (response.toLowerCase().search("southeast")>-1) {
+						doorDirection = "southeast";
+					}
+
+					else if (response.toLowerCase().search("east")>-1) {
+						doorDirection = "east";
+					}
+
+					else if (response.toLowerCase().search("west")>-1) {
+						doorDirection = "west";
+					}
+
+					else if (response.toLowerCase().search("north")>-1){
+						doorDirection = "north";
+					}
+
+					else if (response.toLowerCase().search("south")>-1){
+						doorDirection = "south";
+					}
+
+					else if (response.toLowerCase().search("up")>-1) {
+						doorDirection = "up";
+					}
+
+					else if (response.toLowerCase().search("down")>-1) {
+						doorDirection = "down";
+					}
+
+					if (doorDirection.length>0) {
+						result = openDoor (doorDirection);
+					} else{
+						result ="Open which door?";
+					}
+
+				}
+
+				else if(response.toLowerCase().search("unlock")>-1 && response.toLowerCase().search("door")>-1) {
+
+					var doorDirection = ""
+					console.log ("unlock")
+
+					if (response.toLowerCase().search("northwest")>-1) {
+						console.log ("northwest")
+						doorDirection = "northwest";
+					}
+
+					else if (response.toLowerCase().search("northeast")>-1) {
+						doorDirection = "northeast";
+					}
+
+					else if (response.toLowerCase().search("southwest")>-1) {
+						doorDirection = "southwest";
+					}
+
+					else if (response.toLowerCase().search("southeast")>-1) {
+						doorDirection = "southeast";
+					}
+
+					else if (response.toLowerCase().search("east")>-1) {
+						doorDirection = "east";
+					}
+
+					else if (response.toLowerCase().search("west")>-1) {
+						doorDirection = "west";
+					}
+
+					else if (response.toLowerCase().search("north")>-1){
+						doorDirection = "north";
+					}
+
+					else if (response.toLowerCase().search("south")>-1){
+						doorDirection = "south";
+					}
+
+					else if (response.toLowerCase().search("up")>-1) {
+						doorDirection = "up";
+					}
+
+					else if (response.toLowerCase().search("down")>-1) {
+						doorDirection = "down";
+					}
+
+					if (doorDirection.length>0) {
+						result = unlockDoor (doorDirection);
+					}
+
+					else {
+						result = "You can't unlock that door"
+					}
+
+				}
+
+				else if(response.toLowerCase().search("close")>-1 && response.toLowerCase().search("door")>-1) {
+
+					var doorDirection = ""
+
+					if (response.toLowerCase().search("east")) {
+						doorDirection = "east";
+					}
+
+					else if (response.toLowerCase().search("west")) {
+						doorDirection = "west";
+					}
+
+					else if (response.toLowerCase().search("north")){
+						doorDirection = "north";
+					}
+
+					else if (response.toLowerCase().search("south")){
+						doorDirection = "south";
+					}
+
+					else if (response.toLowerCase().search("northwest")) {
+						doorDirection = "northwest";
+					}
+
+					else if (response.toLowerCase().search("northeast")) {
+						doorDirection = "northeast";
+					}
+
+					else if (response.toLowerCase().search("southwest")) {
+						doorDirection = "southwest";
+					}
+
+					else if (response.toLowerCase().search("southeast")) {
+						doorDirection = "southeast";
+					}
+
+					else if (response.toLowerCase().search("up")) {
+						doorDirection = "up";
+					}
+
+					else if (response.toLowerCase().search("down")) {
+						doorDirection = "down";
+					}
+
+					if (doorDirection.length>0) {
+						result = closeDoor (doorDirection);
+					}
+
+				}
+
+				else if(response.toLowerCase().search("lock")>-1 && response.toLowerCase().search("door")>-1) {
+
+					var doorDirection = ""
+
+					if (response.toLowerCase().search("east")) {
+						doorDirection = "east";
+					}
+
+					else if (response.toLowerCase().search("west")) {
+						doorDirection = "west";
+					}
+
+					else if (response.toLowerCase().search("north")){
+						doorDirection = "north";
+					}
+
+					else if (response.toLowerCase().search("south")){
+						doorDirection = "south";
+					}
+
+					else if (response.toLowerCase().search("northwest")) {
+						doorDirection = "northwest";
+					}
+
+					else if (response.toLowerCase().search("northeast")) {
+						doorDirection = "northeast";
+					}
+
+					else if (response.toLowerCase().search("southwest")) {
+						doorDirection = "southwest";
+					}
+
+					else if (response.toLowerCase().search("southeast")) {
+						doorDirection = "southeast";
+					}
+
+					else if (response.toLowerCase().search("up")) {
+						doorDirection = "up";
+					}
+
+					else if (response.toLowerCase().search("down")) {
+						doorDirection = "down";
+					}
+
+					if (doorDirection.length>0) {
+						result = lockDoor (doorDirection);
+					}
+
+				}
+
+				else if (response.toLowerCase().search("pick up")>-1) {
+
+					if (response.toLowerCase().search("key")>-1) {
+
+						var item = foundItem ("key");
+						addToInventory (item)
+						result = look ();
+					}
+
+					else if (response.toLowerCase().search("axe")>-1) {
+						var item = foundItem ("axe")
+						result = addToInventory (item);
+					}
+
+					else if (response.toLowerCase().search("umbrella")>-1) {
+						var item = foundItem ("umbrella")
+						result = addToInventory (item);
+					}
+
+					else {
+						result = "I don't see that."
+					}
+
+				}
+
+				else if (response.toLowerCase().search("attack")>-1) {
+
+					if (response.toLowerCase().search("rock monster")>-1) {
+
+						result =  attack ("rock monster");
+					}
+
+					else if (response.toLowerCase().search("tardigrade")>-1) {
+
+						result =  attack ("tardigrade");
+					}
+
+					else if (response.toLowerCase().search("hodgepodge")>-1) {
+
+						result =  attack ("Hodgepodge");
+					}
+
+					else {
+						result = "I don't see that."
+					}
+
+				}
+
+				else if (response.toLowerCase().search("wield")>-1) {
+					for (var i in inventory) {
+					console.log (inventory [i]);
+
+						if (inventory [i].type == "weapon") {
+
+								if (response.toLowerCase().search(inventory[i]["name"])>-1) {
+
+									player.rightHand = i;
+									console.log (inventory[i]);
+									player.damage = inventory [i]["damage"];
+
+									result =  "You are wielding an " + inventory[i]["name"] + ".";
+
+								}
+
+								console.log ("this is a weapon",inventory[i]);
+						}
+					}
+
+
+					// if (response.toLowerCase().search("axe")>-1)
+
+				}
+
+				else {
+					document.getElementById("dialogue").innerHTML = "I don't know how to do that";
+				}
+
+				//console.log(response.toLowerCase().search("open"));
+
+				document.getElementById("response").value="";
+				document.getElementById("dialogue").innerHTML = document.getElementById("dialogue").innerHTML + "<br><br><span style='color:red'>" + response + "</span><br>" +result;
+				document.getElementById("dialogue").scrollTo(0,document.getElementById("dialogue").scrollHeight);
+
+
+		}
+
+		function moveTo (direction){
+			console.log ("moveTo", direction);
+
+				if(rooms [currentRoom] [direction]) {
+
+					console.log (rooms [currentRoom] [direction] ["door"], doors [rooms [currentRoom] [direction] ["door"]]);
+
+						if(doors [rooms [currentRoom] [direction] ["door"]] ["open"] == false){
+
+							return "This door is closed"
+						}
+
+						currentRoom = rooms [currentRoom] [direction].room
+					document.getElementById("mapimg").src=rooms[currentRoom].src;
+
+					//checkForNPCs ();
+
+					return "You went " + direction + "<br>" + look();
+					}
+
+					else {
+						return "You can't go that way";
+					}
+
+		}
+
+		function playerResponse (response){
+			// console.log(response);
+
+				if(event.key == "Enter"){
+
+				commandType (response)
+
+			}
+		}
+
+		function look () {
+			var itemDescription="";
+			if (rooms [currentRoom]["items"]) {
+				console.log (rooms [currentRoom]["items"]);
+
+				for (var i in rooms[currentRoom]["items"]){
+					var type=rooms [currentRoom]["items"][i]["type"];
+					var item = items [type] [i];
+
+					itemDescription = itemDescription + " " + item.description
+				}
+			}
+
+			var npcDescription = ""
+			if (rooms [currentRoom].npcs) {
+				var npcCounter = 0
+				for (var n in rooms[currentRoom].npcs){
+					var type = rooms[currentRoom].npcs [n]["type"];
+
+					npcCounter = npcCounter + 1
+
+					npcDescription = type
+				}
+
+				if (npcCounter > 0) {
+
+					if (npcCounter == 1) {
+					var monster = " monster.";
+					}
+
+					else {
+					var monster = " monsters.";
+					}
+
+					npcDescription = "You see " + npcCounter + monster + " The closest one is a " + npcDescription
+				}
+
+			}
+
+			return "<b>"+currentRoom+"</b><br>" + rooms [currentRoom] ["description"] + " " + itemDescription + npcDescription;
+		}
+
+		function openDoor (direction) {
+  		console.log (direction);
+			console.log(doors [rooms [currentRoom] [direction] ["door"]] );
+			if(rooms [currentRoom] [direction]) {
+						if(doors [rooms [currentRoom] [direction] ["door"]] ["locked"] == true){
+							return "This door is locked"
+						}
+
+						else {
+							doors [rooms [currentRoom] [direction] ["door"]] ["open"] = true;
+
+							return "You opened the " + direction + " door";
+						}
+			}
+
+			else {
+				return "You can't go that way."
+			}
+
+			// console.log ("*****open door " + direction)
+
+		}
+
+		function closeDoor (direction) {
+			console.log ("closeDoor", direction);
+
+			if(rooms [currentRoom] [direction]) {
+
+			}
+
+			// console.log ("*****open door " + direction)
+			doors [rooms [currentRoom] [direction] ["door"]] ["open"] = false;
+
+			return "You closed the " + direction + " door";
+		}
+
+		function unlockDoor (direction) {
+			console.log ("unlockDoor", direction);
+
+			var door = rooms [currentRoom] [direction] ["door"];
+			console.log (door)
+
+			var hasKey = false;
+
+			for (var i in inventory) {
+				console.log (inventory [i]);
+
+				if (inventory [i].type == "key") {
+
+					console.log ("this is a key",i);
+					console.log ("this is a key",inventory[i]);
+					console.log (items.key[i]);
+
+					for (var j = 0; j < items.key [i].doors.length; j++) {
+						console.log (items.key [ i].doors [j])
+						console.log (rooms [currentRoom] [direction])
+
+						if (items.key [ i].doors [j] == door) {
+							console.log ("This is the right key");
+							hasKey = true;
+							break;
+						}
+
+						// if (key[inventory [i]] ["doors"] && key [inventory [i]] ["doors"] [j] == rooms [currentRoom] [direction] ["door"]) {
+							// hasKey = true
+						// }
+					}
+
+					if (hasKey){
+						break;
+					}
+				}
+			}
+
+			if (!hasKey) {
+				return "You don't have the right key";
+			}
+
+			//if(rooms [currentRoom] [direction]) {
+					//	if(rooms [currentRoom] [direction] ["door"] ["locked"] == true){
+						//	return "You don't have the key"
+					//	}
+		//	}
+
+			// console.log ("*****open door " + direction)
+			doors [rooms [currentRoom] [direction] ["door"]] ["locked"] = false;
+
+			return "You unlocked the " + direction + " door";
+		}
+
+		function lockDoor (direction) {
+			console.log ("lockDoor", direction);
+
+			//if(rooms [currentRoom] [direction]) {
+					//	if(rooms [currentRoom] [direction] ["door"] ["locked"] == true){
+						//	return "You don't have the key"
+					//	}
+		//	}
+
+			// console.log ("*****open door " + direction)
+			doors [rooms [currentRoom] [direction] ["door"]] ["locked"] = true;
+
+			return "You locked the " + direction + " door";
+		}
+
+		function addToInventory (item) {
+			console.log ("addToInventory", item);
+			inventory [item.name] = item;
+			delete rooms [currentRoom].items[item.name]
+
+			return "You picked up an " + item.name + ".";
+		}
+
+		function foundItem (typeOf) {
+			if (rooms [currentRoom]["items"]) {
+
+				for (var i in rooms[currentRoom]["items"]){
+
+					var type=rooms [currentRoom]["items"][i]["type"];
+					var item = items [type] [i];
+
+					if (type == typeOf) {
+						return item
+					}
+				}
+			}
+
+			return null;
+		}
+
+		function checkForNPCs () {
+			var randomNPC = Math.random ();
+			console.log (randomNPC);
+
+			if (randomNPC > 0.) {
+				console.log ("There's a monster in here");
+
+				if (!rooms [currentRoom].npcs) {
+					rooms [currentRoom].npcs = {};
+				}
+
+			var npcId = parseInt(Math.random () * 1000000);
+			console.log (npcId);
+
+			rooms [currentRoom].npcs [npcId] = new rockMonster (currentRoom,npcId);
+
+			}
+		}
+
+		function attack (monsterDescription) {
+			console.log (monsterDescription);
+
+			var result = " You missed.";
+
+			for (var n in rooms[currentRoom].npcs){
+				console.log ("garbage text");
+					var type = rooms[currentRoom].npcs [n]["type"];
+
+					console.log (type);
+
+					if (type.toLowerCase() == monsterDescription.toLowerCase()) {
+						console.log ("garbage text");
+
+						if (rooms [currentRoom].npcs [n].onHit (player.damage)) {
+							console.log ("killed")
+							result = "You killed the " + monsterDescription + ".";
+							delete rooms [currentRoom].npcs [n]
+							monstersLeft --;
+
+							if (monstersLeft <= 0) {
+								result += " <br><h1>You Win the Game!</h1>"
+							}
+						}
+
+						else {
+							console.log ("not killed")
+
+							result = "You hit the " + monsterDescription + " with " + player.rightHand + "." + " It has " + rooms[currentRoom].npcs [n].hitpoints + " hitpoints left.";
+							if (player.damage/rooms[currentRoom].npcs [n].hitpoints < 0.25 ){
+								result = result + "<b> *thinks* I wish I had a better weapon!</b>";
+							}
+
+						}
+					}
+			}
+
+			return result
+		}
+
+		var monstersLeft = 0;
+
+		function loadMonsters () {
+			rooms ["NO3113's Lobby"].npcs = {}
+			rooms ["NO3113's Lobby"].npcs ["1"] = new rockMonster ("NO3113's Lobby", "1");
+
+			monstersLeft ++;
+
+			rooms ["Upper/Main Lobby"].npcs = {}
+			rooms ["Upper/Main Lobby"].npcs ["2"] = new tardigrade ("Upper/Main Lobby", "2");
+
+			monstersLeft ++;
+
+			rooms ["Main Experiment Chamber"].npcs = {}
+			rooms ["Main Experiment Chamber"].npcs ["3"] = new Hodgepodge ("Main Experiment Chamber", "3");
+
+			monstersLeft ++;
+		}
+
+
+	</script>
+
+	<style>
+
+		* {box-sizing: border-box;}
+
+		body {
+			margin: 0;
+		}
+
+		#map {
+			border: 1px black solid;
+			float: right;
+			width: 45%;
+			padding: 15px;
+		}
+
+		#map img {
+			width: 100%;
+		}
+
+		#dialogue {
+			border: 1px black solid;
+			float: left;
+			width: 55%;
+			padding: 15px;
+		}
+
+		.row:after {
+			content:"";
+			display: table;
+			clear: both;
+		}
+
+		#input {
+			border: 1px black solid;
+			width: 55%;
+			float: left;
+		}
+
+		#input input {
+			width: 100%;
+		}
+
+		@media screen and (max-width: 600px) {
+
+		#map {
+			width: 100%;
+		}
+
+		#dialogue {
+			width: 100%;
+		}
+
+		/*.container {
+			height: 60%;
+		}*/
+
+		}
+
+	</style>
+
+</head>
+
+<body onload="loadMonsters (); commandType ('look'); document.getElementById ('response').focus ()">
+
+<div class="row">
+
+	<div id="dialogue" class="container" style= "height:250px;overflow: auto;">
+	</div>
+
+	<div id="map">
+		<img id="mapimg" src="images/Map/Crystal Kingdom Highlighted Conservatory For Text Game.png">
+	</div>
+
+</div>
+
+<div class="row">
+	<div id="input">
+		<form action="#">
+			<input style="background-color: #EC5DB7" type="text" id="response" onkeypress="playerResponse(this.value);">
+		</form>
+	</div>
+</div>
+
+</body>
+
+</html>
